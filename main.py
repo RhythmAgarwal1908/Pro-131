@@ -1,7 +1,6 @@
-# OMPORT MODULES
 import csv
+import pandas as pd
 
-# READ THE CSV
 rows = []
 
 with open("stars.csv",'r') as f:
@@ -11,23 +10,40 @@ with open("stars.csv",'r') as f:
 
 headers = rows[0]
 star_data = rows[1:]
-print(headers)
-print(star_data)
 
-# CONVERT STAR SOLAR MASS INTO SI UNIT OR KILOGRAM
+df = pd.read_csv("stars.csv")
+solar_mass_list = df["solar_mass"].tolist()
+solar_radius_list = df["solar_radius"].tolist()
+
+solar_mass_list.pop(0)
+solar_radius_list.pop(0)
+
 star_solar_mass_si_unit = []
 
-for index,solar_mass in enumerate(star_data[6]):
-    si_unit = float(solar_mass[index])*1.989e+30
+for data in solar_mass_list:
+
+    si_unit = float(data)*1.989e+30
     star_solar_mass_si_unit.append(si_unit)
 
 print(star_solar_mass_si_unit)
 
-# CONVERT STAR SOLAR RADIUS INTO SI UNIT OR METERS
 star_solar_radius_si_unit = []
 
-for index,solar_radius in enumerate(star_data[7]):
-    si_unit = float(solar_radius[index])* 6.957e+8
+for data in solar_radius_list:
+    si_unit = float(data)* 6.957e+8
     star_solar_radius_si_unit.append(si_unit)
 
 print(star_solar_radius_si_unit)
+
+star_masses = star_solar_mass_si_unit
+star_radiuses = star_solar_radius_si_unit
+star_names = df["star_names"].tolist()
+star_names.pop(0)
+
+star_gravities = []
+
+for index,data in enumerate(star_names):
+    gravity = (float(star_masses[index])*5.972e+24) / (float(star_radiuses[index])*float(star_radiuses[index])*6371000*6371000) * 6.674e-11
+    star_gravities.append(gravity)
+
+print(star_gravities)
